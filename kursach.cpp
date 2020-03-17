@@ -22,17 +22,9 @@ vector<double> resizeCoordinates(vector<double> coordinates, double a, double b,
 	}
 	return finalCoordinates;
 }
-/*vector<double> resizeWeight(vector<double> weight, double a, double b, int amount) {
-	vector<double> newWeights(amount);
-	for (int i = 0; i < newWeights.size(); i++) {
-		newWeights[i] = weight[i] * (b - a) / 2;
-	}
-	return newWeights;
-}*/
 double measure(double a, double b, double parts, vector<double> weight, vector<double> coordinates, int current_max_parts, double newR) {
 	double value = 0.;
 	vector<double> newCoordinates = resizeCoordinates(coordinates, a, b, parts - 1);
-	//vector<double> newWeight = resizeWeight(weight, a, b, parts - 1);
 	for (int i = 0; i < parts - 1; i++) {
 		double func = 2 * sqrt(pow(newR, 2) - pow(newCoordinates[i], 2));
 		value += weight[i] * func * (b - a) / 2;
@@ -51,7 +43,6 @@ double measureS(double a, double b, int parts, vector<double> weight, vector<dou
 double measureV(double a, double b, int parts, vector<double> weight, vector<double> coordinates, int current_max_parts) {
 	double V = 0.;
 	vector<double> newCoordinates = resizeCoordinates(coordinates, a, b, parts - 1);
-	//vector<double> newWeight = resizeWeight(weight, a, b, parts - 1);
 	for (int i = 0; i < newCoordinates.size(); i++) {
 		double newR = sqrt(pow(R, 2) - pow(newCoordinates[i], 2));
 		double S = measureS(x - newR, x + newR, parts, weight, coordinates, current_max_parts, newR);
