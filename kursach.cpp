@@ -36,7 +36,7 @@ double measureS(double a, double b, int parts, vector<double> weight, vector<dou
 	vector<double> coordinatesX(current_max_parts + 1);
 	defineCoordinates(coordinatesX, a, b, current_max_parts);
 	for (int i = 0; i < current_max_parts; i++) {
-		S += measure(coordinatesX[i], coordinatesX[i + 1], parts, weight, coordinates, current_max_parts, newR);	
+		S += measure(coordinatesX[i], coordinatesX[i + 1], parts, weight, coordinates, current_max_parts, newR);
 	}
 	return S;
 }
@@ -53,10 +53,11 @@ double measureV(double a, double b, int parts, vector<double> weight, vector<dou
 int main() {
 	//system("color d3");
 	ofstream fout;
-	fout.open("V.csv");
+	fout.open("table.txt");
 	double compare = (4. / 3.) * M_PI * pow(R,3);
 	cout << "R = " << R << endl << setprecision(8) << "4/3 * PI * R^3 = " << compare << endl;
-	vector <vector<double>> GLcoordinates(3, vector<double>(5));
+
+	vector <vector<double>> GLcoordinates(4, vector<double>(7));
 	GLcoordinates[0][0] = 0.;
 	GLcoordinates[1][0] = -sqrt(3. / 5.);
 	GLcoordinates[1][1] = 0.;
@@ -66,7 +67,15 @@ int main() {
 	GLcoordinates[2][2] = 0.;
 	GLcoordinates[2][3] = 1. / 3. * sqrt(5. - 2. * sqrt(10. / 7.));
 	GLcoordinates[2][4] = 1. / 3. * sqrt(5. + 2. * sqrt(10. / 7.));
-	vector<vector<double>> weight(3, vector<double>(5));
+	GLcoordinates[3][0] = -0.9491079123427586;
+	GLcoordinates[3][1] = -0.7415311855993949;
+	GLcoordinates[3][2] = -0.40584515137739663;
+	GLcoordinates[3][3] = 0;
+	GLcoordinates[3][4] = 0.40584515137739663;
+	GLcoordinates[3][5] = 0.7415311855993949;
+	GLcoordinates[3][6] = 0.9491079123427586;
+
+	vector<vector<double>> weight(4, vector<double>(7));
 	weight[0][0] = 2.;
 	weight[1][0] = 5. / 9.;
 	weight[1][1] = 8. / 9.;
@@ -76,22 +85,31 @@ int main() {
 	weight[2][2] = 128. / 225.;
 	weight[2][3] = (322. + 13. * sqrt(70.)) / 900.;
 	weight[2][4] = (322. - 13. * sqrt(70.)) / 900.;
-	int GLparts[] = { 2, 4, 6 };
+	weight[3][0] = 0.12948496616886976;
+	weight[3][1] = 0.2797053914892766;
+	weight[3][2] = 0.38183005050511903;
+	weight[3][3] = 0.4179591836734694;
+	weight[3][4] = 0.38183005050511903;
+	weight[3][5] = 0.2797053914892766;
+	weight[3][6] = 0.12948496616886976;
+
+	int GLparts[] = { 2, 4, 6, 8 };
 	int max_parts = pow(2, 12);
-	vector<double> V_GL(3);
+	vector<double> V_GL(4);
 	for (int i = 1; i <= max_parts; i *= 2) {
 		vector<double> coordinatesZ(i + 1);
 		defineCoordinates(coordinatesZ, z - R, z + R, i);
 		for (int j = 0; j < i; j++) {
-			for (int k = 0; k < 3; k++) {
-				V_GL[k] += measureV(coordinatesZ[j], coordinatesZ[j + 1], GLparts[k], weight[k], GLcoordinates[k], i); 
+			for (int k = 0; k < 4; k++) {
+				V_GL[k] += measureV(coordinatesZ[j], coordinatesZ[j + 1], GLparts[k], weight[k], GLcoordinates[k], i);
 			}
 		}
-		fout << abs(V_GL[0] - compare) << ";" << abs(V_GL[1] - compare) << ";" << abs(V_GL[2] - compare) << endl;
-		cout << abs(V_GL[0] - compare) << "; " << abs(V_GL[1] - compare) << "; " << abs(V_GL[2] - compare) << endl;
+		fout << abs(V_GL[0] - compare) << " " << abs(V_GL[1] - compare) << " " << abs(V_GL[2] - compare) << " " << abs(V_GL[3] - compare) << endl;
+		cout << abs(V_GL[0] - compare) << "; " << abs(V_GL[1] - compare) << "; " << abs(V_GL[2] - compare) << "; " << abs(V_GL[3] - compare) << endl;
 		V_GL[0] = 0.;
 		V_GL[1] = 0.;
 		V_GL[2] = 0.;
+		V_GL[3] = 0.;
 	}
 	fout.close();
 	system("pause");
